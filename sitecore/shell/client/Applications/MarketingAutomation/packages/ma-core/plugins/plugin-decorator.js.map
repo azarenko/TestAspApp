@@ -1,0 +1,1 @@
+{"version":3,"sources":["../../../code/ng-ma-core/src/plugins/plugin-decorator.ts"],"names":[],"mappings":"AAQA,MAAM,iBAAiB,YAA0B;IAC7C,MAAM,CAAC,UAAC,iBAAsB;QAC1B,iBAAiB,CAAC,aAAa,GAAG,YAAY,CAAC;IACnD,CAAC,CAAC;AACN,CAAC","file":"plugin-decorator.js","sourceRoot":""}

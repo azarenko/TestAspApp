@@ -1,0 +1,58 @@
+﻿TOPIC
+    about_sitecoreinstallframework_settings
+
+SHORT DESCRIPTION
+    Control settings that can be configured for the Sitecore Install framework.
+
+LONG DESCRIPTION
+    This topic covers the optional settings that may be applied when running the
+    Sitecore Install framework.
+
+EXAMPLES
+InformationAction
+    {
+        "Settings" : {
+            "InformationAction" : "SilentlyContinue"
+        }
+    }
+
+    The `InformationAction` may be set in a configuration file to control the
+    action that will be taken when content is logged to the information stream.
+    The setting accepts any `[System.Management.Automation.ActionPreference]`.
+    The default value is `Continue`.
+    The `InformationAction` setting may be overridden when calling
+    `Install-SitecoreConfiguration`.
+
+WarningAction
+    {
+        "Settings" : {
+            "WarningAction" : "SilentlyContinue"
+        }
+    }
+
+    The `WarningAction` may be set in a configuration file to control the action
+    that will be taken when content is logged to the warning stream.
+    The setting accepts any `[System.Management.Automation.ActionPreference]`.
+    The default value is `Continue`.
+    The `WarningAction` setting may be overridden when calling
+    `Install-SitecoreConfiguration`.
+
+ErrorAction
+    {
+        "Settings" : {
+            "ErrorAction" : "Continue"
+        }
+    }
+
+    The `ErrorAction` may be set in a configuration file to control the action
+    that will be taken when content is logged to the error stream.
+    The setting accepts any `[System.Management.Automation.ActionPreference]`.
+    The default value is `Stop`.
+    The `ErrorAction` setting may be overridden when calling
+    `Install-SitecoreConfiguration`.
+
+SEE ALSO
+    - https://msdn.microsoft.com/en-us/powershell/reference/5.1/microsoft.powershell.core/about/about_preference_variables
+    - https://msdn.microsoft.com/en-us/library/system.management.automation.actionpreference(v=vs.85).aspx
+    - about_SitecoreInstallFramework
+

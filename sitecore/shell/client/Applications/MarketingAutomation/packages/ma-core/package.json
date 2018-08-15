@@ -1,0 +1,69 @@
+{
+  "name": "@sitecore/ma-core",
+  "version": "0.2.0-r00650",
+  "description": "Core components and classes that can be used to develop automation activities and plug them into the Marketing Automation application.",
+  "main": "index.js",
+  "scripts": {
+    "presetup": "npm install && npm run build",
+    "setup": "cd ../../dist/ma-core && npm link && rimraf node_modules",
+    "lint": "tslint -c tslint.json -p tsconfig.json src/**/*.ts",
+    "prebuild": "npm ls && npm run lint && rimraf ../../dist/ma-core/",
+    "build": "ngc -p ./src/tsconfig.lib.json",
+    "postbuild": "copyfiles package.json ../../dist/ma-core/",
+    "watch": "npm run build && tsc -w -p ./src/tsconfig.lib.json",
+    "test": "npm run test:all",
+    "test:ci": "cross-env NODE_ENV=ci npm run test:all",
+    "test:all": "rimraf coverage/ && karma start",
+    "ci": "npm run build && npm run test:ci"
+  },
+  "keywords": [
+    "marketing automation",
+    "activities",
+    "sitecore"
+  ],
+  "author": "GRP-Project-MarketingAutomation@sitecore.net",
+  "repository": {
+    "type": "git",
+    "url": "http://tfs4dk1.dk.sitecore.net/tfs/PD-Products-01/Products/_git/Marketing.Automation"
+  },
+  "devDependencies": {
+    "@angular/common": "4.3.5",
+    "@angular/compiler": "4.3.5",
+    "@angular/compiler-cli": "4.3.5",
+    "@angular/core": "4.3.5",
+    "@angular/http": "4.3.5",
+    "@angular/platform-browser": "4.3.5",
+    "@angular/platform-browser-dynamic": "4.3.5",
+    "@ngx-translate/core": "^7.2.0",
+    "@types/jasmine": "^2.5.53",
+    "@types/lodash": "^4.14.73",
+    "@types/sinon": "^2.3.7",
+    "codelyzer": "^3.0.1",
+    "copyfiles": "^1.2.0",
+    "cross-env": "^5.0.5",
+    "jasmine-core": "2.5.2",
+    "karma": "^1.7.0",
+    "karma-chrome-launcher": "^2.0.0",
+    "karma-cli": "^1.0.1",
+    "karma-jasmine": "^1.1.0",
+    "karma-jasmine-html-reporter": "^0.2.2",
+    "karma-teamcity-reporter": "1.0.0",
+    "karma-typescript": "^3.0.5",
+    "lodash": "^4.17.4",
+    "reflect-metadata": "^0.1.10",
+    "rimraf": "^2.6.1",
+    "rxjs": "^5.4.3",
+    "sinon": "^4.0.2",
+    "tslint": "^5.7.0",
+    "tslint-eslint-rules": "^4.0.0",
+    "typescript": "^2.4.2",
+    "zone.js": "^0.8.16"
+  },
+  "peerDependencies": {
+    "@angular/core": ">=4.0.0",
+    "@angular/http": ">=4.0.0",
+    "@ngx-translate/core": ">=7.0.0",
+    "rxjs": ">=5.0.0"
+  },
+  "dependencies": {}
+}

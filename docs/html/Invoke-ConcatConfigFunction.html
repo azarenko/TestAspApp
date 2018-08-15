@@ -1,0 +1,86 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+  <meta http-equiv="Content-Style-Type" content="text/css" />
+  <meta name="generator" content="pandoc" />
+  <title></title>
+  <style type="text/css">code{white-space: pre;}</style>
+  <style type="text/css">
+div.sourceCode { overflow-x: auto; }
+table.sourceCode, tr.sourceCode, td.lineNumbers, td.sourceCode {
+  margin: 0; padding: 0; vertical-align: baseline; border: none; }
+table.sourceCode { width: 100%; line-height: 100%; }
+td.lineNumbers { text-align: right; padding-right: 4px; padding-left: 4px; color: #aaaaaa; border-right: 1px solid #aaaaaa; }
+td.sourceCode { padding-left: 5px; }
+code > span.kw { color: #007020; font-weight: bold; } /* Keyword */
+code > span.dt { color: #902000; } /* DataType */
+code > span.dv { color: #40a070; } /* DecVal */
+code > span.bn { color: #40a070; } /* BaseN */
+code > span.fl { color: #40a070; } /* Float */
+code > span.ch { color: #4070a0; } /* Char */
+code > span.st { color: #4070a0; } /* String */
+code > span.co { color: #60a0b0; font-style: italic; } /* Comment */
+code > span.ot { color: #007020; } /* Other */
+code > span.al { color: #ff0000; font-weight: bold; } /* Alert */
+code > span.fu { color: #06287e; } /* Function */
+code > span.er { color: #ff0000; font-weight: bold; } /* Error */
+code > span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
+code > span.cn { color: #880000; } /* Constant */
+code > span.sc { color: #4070a0; } /* SpecialChar */
+code > span.vs { color: #4070a0; } /* VerbatimString */
+code > span.ss { color: #bb6688; } /* SpecialString */
+code > span.im { } /* Import */
+code > span.va { color: #19177c; } /* Variable */
+code > span.cf { color: #007020; font-weight: bold; } /* ControlFlow */
+code > span.op { color: #666666; } /* Operator */
+code > span.bu { } /* BuiltIn */
+code > span.ex { } /* Extension */
+code > span.pp { color: #bc7a00; } /* Preprocessor */
+code > span.at { color: #7d9029; } /* Attribute */
+code > span.do { color: #ba2121; font-style: italic; } /* Documentation */
+code > span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
+code > span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } /* CommentVar */
+code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Information */
+  </style>
+</head>
+<body>
+<hr />
+<p>external help file: SitecoreInstallFramework-help.xml<br />
+online version:<br />
+schema: 2.0.0<br />
+---</p>
+<h1 id="invoke-concatconfigfunction">Invoke-ConcatConfigFunction</h1>
+<h2 id="synopsis">SYNOPSIS</h2>
+<p>Concatenate values within a configuration</p>
+<h2 id="syntax">SYNTAX</h2>
+<pre><code>Invoke-ConcatConfigFunction [[-Values] &lt;PSObject[]&gt;] [&lt;CommonParameters&gt;]</code></pre>
+<h2 id="description">DESCRIPTION</h2>
+<p>This function supports concatenating multiple values as a single value in a configuration file.</p>
+<h2 id="examples">EXAMPLES</h2>
+<h3 id="example-1">Example 1</h3>
+<pre><code>PS C:\&gt; Invoke-ConcateConfigFunction 1,2,3,4
+PS C:\&gt; 1234</code></pre>
+<p>This example takes a collection of values and concatenates them together.</p>
+<h2 id="parameters">PARAMETERS</h2>
+<h3 id="values">-Values</h3>
+<p>An array of values to be concatenated.</p>
+<div class="sourceCode"><pre class="sourceCode yaml"><code class="sourceCode yaml"><span class="fu">Type:</span><span class="at"> PSObject[]</span>
+<span class="fu">Parameter Sets:</span><span class="at"> (All)</span>
+<span class="fu">Aliases:</span><span class="at"> </span>
+
+<span class="fu">Required:</span><span class="at"> False</span>
+<span class="fu">Position:</span><span class="at"> 0</span>
+<span class="fu">Default value:</span><span class="at"> None</span>
+<span class="fu">Accept pipeline input:</span><span class="at"> False</span>
+<span class="fu">Accept wildcard characters:</span><span class="at"> False</span></code></pre></div>
+<h3 id="commonparameters">CommonParameters</h3>
+<p>This cmdlet supports the common parameters: -Debug, -ErrorAction, -ErrorVariable, -InformationAction, -InformationVariable, -OutVariable, -OutBuffer, -PipelineVariable, -Verbose, -WarningAction, and -WarningVariable. For more information, see about_CommonParameters (<a href="http://go.microsoft.com/fwlink/?LinkID=113216" class="uri">http://go.microsoft.com/fwlink/?LinkID=113216</a>).</p>
+<h2 id="inputs">INPUTS</h2>
+<h3 id="system.management.automation.psobject">System.Management.Automation.PSObject[]</h3>
+<h2 id="outputs">OUTPUTS</h2>
+<h3 id="system.object">System.Object</h3>
+<h2 id="notes">NOTES</h2>
+<h2 id="related-links">RELATED LINKS</h2>
+</body>
+</html>

@@ -1,0 +1,254 @@
+﻿# SitecoreInstallFramework_Configurations
+## about_SitecoreInstallFramework_Configurations
+
+# SHORT DESCRIPTION
+Full configuration examples for the Sitecore Install Framework.
+
+# LONG DESCRIPTION
+This topic outlines examples of configurations that can be created using the
+Sitecore Install Framework.
+
+See `about_SitecoreInstallFramework` for general information on the framework
+and `about_SitecoreInstallFramework_Extending` for information on creating your
+own tasks and config functions to use in a configuration.
+
+# EXAMPLES
+
+## Single Task
+```
+{
+    "Tasks": {
+        "CopyFiles": {
+            "Type": "Copy",
+            "Params": {
+                "Source": "c:\myfiles",
+                "Destination": "c:\destination
+            }
+        }
+    }
+}
+```
+This example will copy files from `c:\myfiles` to `c:\destination`
+
+## Skipping a Task
+```
+{
+    "Tasks": {
+        "CopyFiles": {
+            "Type": "Copy",
+            "Params": {
+                "Source": "c:\myfiles",
+                "Destination": "c:\destination
+            },
+            "Skip": "true"
+        }
+    }
+}
+```
+This example will skip the "CopyFiles" task.
+
+## Default Parameters
+```
+{
+    "Parameters": {
+        "Source": { "Type": "string", "DefaultValue": "c:\myfiles" }
+    },
+    "Tasks": {
+        "CopyFiles": {
+            "Type": "Copy",
+            "Params": {
+                "Source": "[parameter('Source')]",
+                "Destination": "c:\destination
+            }
+        }
+    }
+}
+```
+This example will copy files from `c:\myfiles` to `c:\destination` by default.
+If the `Source` parameter is passed, a different set of files will be copied.
+
+For example, if the above was saved as `configuration.json`, running
+`Install-SitecoreConfiguration -Path .\configuration.json -Source c:\otherfiles` would
+copy files from `c:\otherfiles` to the destination.
+
+## Mandatory Parameters
+```
+{
+    "Parameters": {
+        "Source": { "Type": "string", "Description" : "Path to the source files" }
+    },
+    "Tasks": {
+        "CopyFiles": {
+            "Type": "Copy",
+            "Params": {
+                "Source": "[parameter('Source')]",
+                "Destination": "c:\destination
+            }
+        }
+    }
+}
+```
+In this example the `Source` parameter is now mandatory. Running `Install-SitecoreConfiguration`
+using this configuration will request the value if the user does not provide it.
+The description can be shown at the command line to help the user understand what
+the parameter requires.
+
+## Reference Parameters
+```
+{
+    "Parameters": {
+        "Source": { "Type": "string", "DefaultValue": "c:\myfiles" },
+        "Reference": { "Type": "string", "Reference": "Source" }
+    },
+    "Tasks": {
+        "CopyFiles": {
+            "Type": "Copy",
+            "Params": {
+                "Source": "[parameter('Reference')]",
+                "Destination": "c:\destination
+            }
+        }
+    }
+}
+```
+This example will copy files from `c:\myfiles` to `c:\destination` by default.
+If the `Source` parameter is passed, a different set of files will be copied.
+
+For example, if the above was saved as `configuration.json`, running
+`Install-SitecoreConfiguration -Path .\configuration.json -Source c:\otherfiles` would
+copy files from `c:\otherfiles` to the destination.
+
+## Variables
+```
+{
+    "Parameters": {
+        "Source": { "Type": "string", "Description" : "Path to the source files" }
+    },
+    "Variables": {
+        "Destination": "[concat(environment('SystemDrive'), '\\destination')]"
+    },
+    "Tasks": {
+        "CopyFiles": {
+            "Type": "Copy",
+            "Params": {
+                "Source": "[parameter('Source')]",
+                "Destination": "[variable('Destination')]"
+            }
+        }
+    }
+}
+```
+In this example, a variable is used to calculate the destination path. Variables
+can use other config functions (e.g. Parameter, Environment, Concat) and also
+use variables that have already been declared.
+
+## Multiple Tasks
+```
+{
+    "Parameters": {
+        "Source": { "Type": "string", "Description" : "Path to the source files" }
+    },
+    "Variables": {
+        "Destination": "[concat(environment('SystemDrive'), '\\destination')]"
+    },
+    "Tasks": {
+        "PreparePath": {
+            "Type": "EnsurePath",
+            "Params": {
+                "Clean": [ "[variable('Destination')]" ]
+            }
+        },
+        "CopyFiles": {
+            "Type": "Copy",
+            "Params": {
+                "Source": "[parameter('Source')]",
+                "Destination": "[variable('Destination')]"
+            }
+        }
+    }
+}
+```
+In this example the task called `PreparePath` will run first. Using the `EnsurePath`
+task will ensure the destination path exists and does not contain any files.
+The `CopyFiles` task copies files to the empty directory.
+
+By default, tasks are ran in the order they are declared in the configuration.
+The order of the tasks can be modified using the `From`, `To`, and `Tasks`
+parameters when calling `Install-SitecoreConfiguration`.
+
+## Extending with modules
+You can extend configurations with custom task and config functions. You can use
+the `Register-SitecoreInstallExtension` command to register functions for use in
+configurations :
+```
+Register-SitecoreInstallExtension -Command Write-Output -As WriteOutput -Type Task
+Register-SitecoreInstallExtension -Command Get-Random -As Random -Type ConfigFunction
+```
+
+If the customizations were saved to `c:\scripts\extensions.psm1`, they can be
+included in a configuration by setting the `Modules` property:
+
+```
+{
+    "Parameters": {
+        "Source": { "Type": "string", "Description" : "Path to the source files" }
+    },
+    "Variables": {
+        "RandomFolder": "[random(5000)]",
+        "Destination": "[concat(environment('SystemDrive'), '\\', variable('RandomFolder'))]"
+    },
+    "Tasks": {
+        "CustomWrite": {
+            "Type": "WriteOutput",
+            "Params": {
+                "Message": "Custom task is running"
+            }
+        },
+        "PreparePath": {
+            "Type": "EnsurePath",
+            "Params": {
+                "Clean": [ "[variable('Destination')]" ]
+            }
+        },
+        "CopyFiles": {
+            "Type": "Copy",
+            "Params": {
+                "Source": "[parameter('Source')]",
+                "Destination": "[variable('Destination')]"
+            }
+        }
+    },
+    "Modules": [
+        "c:\\scripts\\extensions.psm1"
+    ]
+}
+```
+
+Now when the configuration is ran the variable `RandomFolder` is set using the
+custom config function. The `CustomWrite` task is also ran using the custom
+PowerShell function.
+
+Multiple modules can be added to a configuration.
+
+## Settings
+You can control features of the installation process by adding settings to a
+configuration.
+
+```
+{
+    "Settings": {
+        "RequireAdmin" : false,
+        "ErrorAction" : "Stop",
+        "WarningAction": "Continue"
+        "InformationAction": "Continue"
+    }
+}
+```
+
+For more information on settings see `about_SitecoreInstallFramework_Settings`
+
+# SEE ALSO
+
+- about_SitecoreInstallFramework
+- about_SitecoreInstallFramework_Extending
+- about_SitecoreInstallFramework_Settings

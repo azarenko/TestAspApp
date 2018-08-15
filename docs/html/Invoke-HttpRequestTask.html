@@ -1,0 +1,160 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+  <meta http-equiv="Content-Style-Type" content="text/css" />
+  <meta name="generator" content="pandoc" />
+  <title></title>
+  <style type="text/css">code{white-space: pre;}</style>
+  <style type="text/css">
+div.sourceCode { overflow-x: auto; }
+table.sourceCode, tr.sourceCode, td.lineNumbers, td.sourceCode {
+  margin: 0; padding: 0; vertical-align: baseline; border: none; }
+table.sourceCode { width: 100%; line-height: 100%; }
+td.lineNumbers { text-align: right; padding-right: 4px; padding-left: 4px; color: #aaaaaa; border-right: 1px solid #aaaaaa; }
+td.sourceCode { padding-left: 5px; }
+code > span.kw { color: #007020; font-weight: bold; } /* Keyword */
+code > span.dt { color: #902000; } /* DataType */
+code > span.dv { color: #40a070; } /* DecVal */
+code > span.bn { color: #40a070; } /* BaseN */
+code > span.fl { color: #40a070; } /* Float */
+code > span.ch { color: #4070a0; } /* Char */
+code > span.st { color: #4070a0; } /* String */
+code > span.co { color: #60a0b0; font-style: italic; } /* Comment */
+code > span.ot { color: #007020; } /* Other */
+code > span.al { color: #ff0000; font-weight: bold; } /* Alert */
+code > span.fu { color: #06287e; } /* Function */
+code > span.er { color: #ff0000; font-weight: bold; } /* Error */
+code > span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
+code > span.cn { color: #880000; } /* Constant */
+code > span.sc { color: #4070a0; } /* SpecialChar */
+code > span.vs { color: #4070a0; } /* VerbatimString */
+code > span.ss { color: #bb6688; } /* SpecialString */
+code > span.im { } /* Import */
+code > span.va { color: #19177c; } /* Variable */
+code > span.cf { color: #007020; font-weight: bold; } /* ControlFlow */
+code > span.op { color: #666666; } /* Operator */
+code > span.bu { } /* BuiltIn */
+code > span.ex { } /* Extension */
+code > span.pp { color: #bc7a00; } /* Preprocessor */
+code > span.at { color: #7d9029; } /* Attribute */
+code > span.do { color: #ba2121; font-style: italic; } /* Documentation */
+code > span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
+code > span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } /* CommentVar */
+code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Information */
+  </style>
+</head>
+<body>
+<hr />
+<p>external help file: SitecoreInstallFramework-help.xml<br />
+online version:<br />
+schema: 2.0.0<br />
+---</p>
+<h1 id="invoke-httprequesttask">Invoke-HttpRequestTask</h1>
+<h2 id="synopsis">SYNOPSIS</h2>
+<p>Task to support making requests over the Internet.</p>
+<h2 id="syntax">SYNTAX</h2>
+<pre><code>Invoke-HttpRequestTask [-Uri] &lt;String&gt; [[-Action] &lt;String&gt;] [[-ContentType] &lt;String&gt;]
+ [[-Parameters] &lt;Hashtable&gt;] [[-ExpectedStatusCode] &lt;Int32&gt;] [-WhatIf] [-Confirm] [&lt;CommonParameters&gt;]</code></pre>
+<h2 id="description">DESCRIPTION</h2>
+<p>The Invoke-HttpRequestTask cmdlet sents HTTP requests to a given URI. It supports both 'GET' and 'POST' request methods for sending and retrieving data and you can configure it to check for a specific Status code on the response.</p>
+<h2 id="examples">EXAMPLES</h2>
+<h3 id="example-1">Example 1</h3>
+<pre><code>PS C:\&gt; Invoke-HttpRequestTask -Uri &quot;http://www.somedomain.com&quot;</code></pre>
+<p>This makes a 'GET' request to the URI 'www.somedomain.com'.</p>
+<h3 id="example-2">Example 2</h3>
+<pre><code>PS C:\&gt; Invoke-HttpRequestTask -Uri &quot;http://www.somedomain.com&quot; -Action &quot;POST&quot; -Parameters @{ param1=&quot;data&quot; }</code></pre>
+<p>This makes a 'POST' request to the URI 'www.somedomain.com' using the data in the Parameters as the payload of the request.</p>
+<h3 id="example-3">Example 3</h3>
+<pre><code>PS C:\&gt; Invoke-HttpRequestTask -Uri &quot;http://www.somedomain.com&quot; -ExpectedStatusCode 404</code></pre>
+<p>This makes a 'GET' request to the URI 'www.somedomain.com' and throw an exception if the response status code is not 404.</p>
+<h2 id="parameters">PARAMETERS</h2>
+<h3 id="action">-Action</h3>
+<p>The type of request to make.</p>
+<div class="sourceCode"><pre class="sourceCode yaml"><code class="sourceCode yaml"><span class="fu">Type:</span><span class="at"> String</span>
+<span class="fu">Parameter Sets:</span><span class="at"> (All)</span>
+<span class="fu">Aliases:</span><span class="at"> </span>
+<span class="fu">Accepted values:</span><span class="at"> get, post</span>
+
+<span class="fu">Required:</span><span class="at"> False</span>
+<span class="fu">Position:</span><span class="at"> 1</span>
+<span class="fu">Default value:</span><span class="at"> None</span>
+<span class="fu">Accept pipeline input:</span><span class="at"> False</span>
+<span class="fu">Accept wildcard characters:</span><span class="at"> False</span></code></pre></div>
+<h3 id="contenttype">-ContentType</h3>
+<p>Sets the 'ContentType' header for the request.</p>
+<div class="sourceCode"><pre class="sourceCode yaml"><code class="sourceCode yaml"><span class="fu">Type:</span><span class="at"> String</span>
+<span class="fu">Parameter Sets:</span><span class="at"> (All)</span>
+<span class="fu">Aliases:</span><span class="at"> </span>
+
+<span class="fu">Required:</span><span class="at"> False</span>
+<span class="fu">Position:</span><span class="at"> 2</span>
+<span class="fu">Default value:</span><span class="at"> None</span>
+<span class="fu">Accept pipeline input:</span><span class="at"> False</span>
+<span class="fu">Accept wildcard characters:</span><span class="at"> False</span></code></pre></div>
+<h3 id="expectedstatuscode">-ExpectedStatusCode</h3>
+<p>The status code expected from the response.</p>
+<div class="sourceCode"><pre class="sourceCode yaml"><code class="sourceCode yaml"><span class="fu">Type:</span><span class="at"> Int32</span>
+<span class="fu">Parameter Sets:</span><span class="at"> (All)</span>
+<span class="fu">Aliases:</span><span class="at"> </span>
+
+<span class="fu">Required:</span><span class="at"> False</span>
+<span class="fu">Position:</span><span class="at"> 4</span>
+<span class="fu">Default value:</span><span class="at"> None</span>
+<span class="fu">Accept pipeline input:</span><span class="at"> False</span>
+<span class="fu">Accept wildcard characters:</span><span class="at"> False</span></code></pre></div>
+<h3 id="parameters-1">-Parameters</h3>
+<p>The data to pass in the request.</p>
+<div class="sourceCode"><pre class="sourceCode yaml"><code class="sourceCode yaml"><span class="fu">Type:</span><span class="at"> Hashtable</span>
+<span class="fu">Parameter Sets:</span><span class="at"> (All)</span>
+<span class="fu">Aliases:</span><span class="at"> </span>
+
+<span class="fu">Required:</span><span class="at"> False</span>
+<span class="fu">Position:</span><span class="at"> 3</span>
+<span class="fu">Default value:</span><span class="at"> None</span>
+<span class="fu">Accept pipeline input:</span><span class="at"> False</span>
+<span class="fu">Accept wildcard characters:</span><span class="at"> False</span></code></pre></div>
+<h3 id="uri">-Uri</h3>
+<p>Specifies the URI where the HTTP request is being made.</p>
+<div class="sourceCode"><pre class="sourceCode yaml"><code class="sourceCode yaml"><span class="fu">Type:</span><span class="at"> String</span>
+<span class="fu">Parameter Sets:</span><span class="at"> (All)</span>
+<span class="fu">Aliases:</span><span class="at"> </span>
+
+<span class="fu">Required:</span><span class="at"> True</span>
+<span class="fu">Position:</span><span class="at"> 0</span>
+<span class="fu">Default value:</span><span class="at"> None</span>
+<span class="fu">Accept pipeline input:</span><span class="at"> False</span>
+<span class="fu">Accept wildcard characters:</span><span class="at"> False</span></code></pre></div>
+<h3 id="confirm">-Confirm</h3>
+<p>Prompts you for confirmation before running the cmdlet.</p>
+<div class="sourceCode"><pre class="sourceCode yaml"><code class="sourceCode yaml"><span class="fu">Type:</span><span class="at"> SwitchParameter</span>
+<span class="fu">Parameter Sets:</span><span class="at"> (All)</span>
+<span class="fu">Aliases:</span><span class="at"> cf</span>
+
+<span class="fu">Required:</span><span class="at"> False</span>
+<span class="fu">Position:</span><span class="at"> Named</span>
+<span class="fu">Default value:</span><span class="at"> None</span>
+<span class="fu">Accept pipeline input:</span><span class="at"> False</span>
+<span class="fu">Accept wildcard characters:</span><span class="at"> False</span></code></pre></div>
+<h3 id="whatif">-WhatIf</h3>
+<p>Shows what would happen if the cmdlet runs.<br />
+The cmdlet is not run.</p>
+<div class="sourceCode"><pre class="sourceCode yaml"><code class="sourceCode yaml"><span class="fu">Type:</span><span class="at"> SwitchParameter</span>
+<span class="fu">Parameter Sets:</span><span class="at"> (All)</span>
+<span class="fu">Aliases:</span><span class="at"> wi</span>
+
+<span class="fu">Required:</span><span class="at"> False</span>
+<span class="fu">Position:</span><span class="at"> Named</span>
+<span class="fu">Default value:</span><span class="at"> None</span>
+<span class="fu">Accept pipeline input:</span><span class="at"> False</span>
+<span class="fu">Accept wildcard characters:</span><span class="at"> False</span></code></pre></div>
+<h3 id="commonparameters">CommonParameters</h3>
+<p>This cmdlet supports the common parameters: -Debug, -ErrorAction, -ErrorVariable, -InformationAction, -InformationVariable, -OutVariable, -OutBuffer, -PipelineVariable, -Verbose, -WarningAction, and -WarningVariable. For more information, see about_CommonParameters (<a href="http://go.microsoft.com/fwlink/?LinkID=113216" class="uri">http://go.microsoft.com/fwlink/?LinkID=113216</a>).</p>
+<h2 id="inputs">INPUTS</h2>
+<h3 id="none">None</h3>
+<h2 id="outputs">OUTPUTS</h2>
+<h3 id="system.object">System.Object</h3>
+<h2 id="notes">NOTES</h2>
+<h2 id="related-links">RELATED LINKS</h2>
+</body>
+</html>

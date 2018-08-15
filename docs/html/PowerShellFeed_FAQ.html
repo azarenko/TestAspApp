@@ -1,0 +1,89 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+  <meta http-equiv="Content-Style-Type" content="text/css" />
+  <meta name="generator" content="pandoc" />
+  <title></title>
+  <style type="text/css">code{white-space: pre;}</style>
+</head>
+<body>
+<h1 id="sitecore-powershell-public-nuget-feed">Sitecore PowerShell Public NuGet Feed</h1>
+<p>Sitecore distributes PowerShell modules as NuGet packages. Here are the answers to some of the most frequently asked questions about using Sitecore PowerShell modules.</p>
+<table>
+<colgroup>
+<col width="36%" />
+<col width="63%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th>Question</th>
+<th>Answer</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>What is the URL of the PowerShell NuGet feed?</td>
+<td><code>https://sitecore.myget.org/F/sc-powershell/api/v2</code></td>
+</tr>
+<tr class="even">
+<td>When are the packages available?</td>
+<td>We intend to make packages available as soon as possible. Packages may be released more frequently then platform updates.</td>
+</tr>
+<tr class="odd">
+<td>What about hotfixes?</td>
+<td>Only major, minor and patch releases will be made following <a href="https://semver.org/spec/v2.0.0.html">Semver</a> principles.</td>
+</tr>
+<tr class="even">
+<td>Will there be a private feed for MVPs who get the release early?</td>
+<td>We have no plans for a seperate MVP feed yet.</td>
+</tr>
+<tr class="odd">
+<td>What about external references?</td>
+<td>Packages with dependencies to external content will install those dependencies whenever possible.</td>
+</tr>
+<tr class="even">
+<td>What is actually in the packages?</td>
+<td>Packages are built to conform to the requirements for <a href="https://docs.microsoft.com/en-gb/powershell/module/powershellget/?view=powershell-5.1">PowerShellGet</a></td>
+</tr>
+<tr class="odd">
+<td>Where is the Sitecore license for PowerShell modules hosted on MyGet?</td>
+<td>You can find the license file here: <a href="https://doc.sitecore.net/~/media/C23E989268EC4FA588108F839675A5B6.pdf">Sitecore MyGet License Agreement</a>.</td>
+</tr>
+<tr class="even">
+<td>What about support?</td>
+<td></td>
+</tr>
+</tbody>
+</table>
+<h2 id="how-do-i-register-the-powershell-nuget-repository">How do I register the PowerShell NuGet repository?</h2>
+<p>To install Sitecore PowerShell modules, you must register the PowerShell NuGet repository. You only need to register the repository only once.</p>
+<p>To register the PowerShell NuGet repository:</p>
+<ol>
+<li>Launch PowerShell as an administrator.</li>
+<li><p>In the PowerShell command line, run the following cmdlet:</p>
+<pre class="powershell"><code>Register-PSRepository -Name SitecoreGallery -SourceLocation https://sitecore.myget.org/F/sc-powershell/api/v2</code></pre>
+<p>Repositories are registered as <em>untrusted</em> by default and you must therefore approve every module that you want to install.</p></li>
+<li><p>To register your repository as trusted and automatically approve the installation of any module, run the following cmdlet:</p>
+<pre class="powershell"><code>Set-PSRepository -Name SitecoreGallery -InstallationPolicy Trusted</code></pre></li>
+</ol>
+<h2 id="how-do-i-install-a-module">How do I install a module?</h2>
+<p>After you register the repository, you can use it to install modules.</p>
+<p>For example, to install the <em>SitecoreInstallFramework</em> module:</p>
+<ol>
+<li>Launch PowerShell as an administrator.</li>
+<li><p>In the PowerShell command line, run the following cmdlet:</p>
+<pre class="powershell"><code>Install-Module -Name SitecoreInstallFramework -Repository SitecoreGallery</code></pre>
+<p>Modules are installed for all users by default.<br />
+To install the module for the current user only, append <code>-Scope CurrentUser</code> to the previous cmdlet.</p></li>
+</ol>
+<h2 id="how-do-i-update-a-module">How do I update a module?</h2>
+<p>New versions of the modules are pushed to the same repository. You can then update the module to get the latest version.</p>
+<p>For example, to update the <em>SitecoreInstallFramework</em> module:</p>
+<ol>
+<li>Launch PowerShell as an administrator.</li>
+<li><p>In the PowerShell command line, run the following cmdlet:</p>
+<pre class="powershell"><code>Update-Module SitecoreInstallFramework</code></pre></li>
+</ol>
+</body>
+</html>

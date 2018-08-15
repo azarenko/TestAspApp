@@ -1,0 +1,178 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+  <meta http-equiv="Content-Style-Type" content="text/css" />
+  <meta name="generator" content="pandoc" />
+  <title></title>
+  <style type="text/css">code{white-space: pre;}</style>
+</head>
+<body>
+<h1 id="sitecoreinstallframework">SitecoreInstallFramework</h1>
+<h2 id="about_sitecoreinstallframework">about_SitecoreInstallFramework</h2>
+<h1 id="short-description">SHORT DESCRIPTION</h1>
+<p>Deploy and configure Sitecore instances.</p>
+<h1 id="long-description">LONG DESCRIPTION</h1>
+<p>The Sitecore Install Framework enables users to deploy and configure a Sitecore<br />
+environment using a standard configuration design that can be extended through<br />
+custom PowerShell functions.</p>
+<p>The framework defines a configuration format that supports:</p>
+<ul>
+<li>Parameters</li>
+<li>Variables</li>
+<li>Tasks</li>
+<li>Extensions (Custom tasks, custom config functions)</li>
+</ul>
+<p>By utilizing the framework, you can use extensions to configure a machine with<br />
+one or more Sitecore components, services, custom applications, and so on.</p>
+<h2 id="configurations">Configurations</h2>
+<p>A configuration is a JSON file that defines the environment to be deployed.<br />
+The configuration follows a specific schema using the following format:</p>
+<pre><code>{
+    &quot;Parameters&quot; : {},
+    &quot;Variables&quot; : {},
+    &quot;Tasks&quot; : {},
+    &quot;Modules&quot; : []
+}</code></pre>
+<h2 id="parameters">Parameters</h2>
+<p>Each entry in the 'Parameters' section is a Key/Value pair that allows common<br />
+configuration elements to be re-used throughout the configuration file.</p>
+<pre><code>{
+    &quot;Source&quot;: { &quot;Type&quot;: &quot;string&quot; },
+    &quot;DeploymentDirectory&quot;: { &quot;Type&quot;: &quot;string&quot;, &quot;DefaultValue&quot;: &quot;C:\inetpub\wwwroot&quot; },
+    &quot;SQLUser: {  &quot;Type&quot;: &quot;string&quot;, &quot;DefaultValue&quot;: &quot;sa&quot; },
+    &quot;Databases&quot;: {  &quot;Type&quot;: &quot;string[]&quot;, &quot;DefaultValue&quot;: [ &#39;core&#39;, &#39;master&#39;, &#39;web&#39; ] }
+}</code></pre>
+<p>All Parameters must have a 'Type'. They may also have a 'DefaultValue' that can<br />
+be overridden from the command line when invoking an installation.</p>
+<p>For example, overriding the &quot;DeploymentDirectory&quot; parameter for the configuration above:</p>
+<pre><code>
+Install-SitecoreConfiguration -Path .\config.json -DeploymentDirectory &quot;C:\Websites&quot;
+</code></pre>
+<p>If a DefaultValue is not provided, the parameter must be passed when invoking<br />
+Install-SitecoreConfiguration</p>
+<p>Parameters can also reference other Parameters using the 'Reference' property.<br />
+For example, referencing a common parameter such as the SQL User:</p>
+<pre><code>{
+    &quot;Source&quot;: { &quot;Type&quot;: &quot;string&quot; },
+    &quot;DeploymentDirectory&quot;: { &quot;Type&quot;: &quot;string&quot;, &quot;DefaultValue&quot;: &quot;C:\inetpub\wwwroot&quot; },
+    &quot;SQLUser: {  &quot;Type&quot;: &quot;string&quot;, &quot;DefaultValue&quot;: &quot;sa&quot; },
+    &quot;MasterSQLUser: {  &quot;Type&quot;: &quot;string&quot;, &quot;Reference&quot;: &quot;SQLUser&quot; },
+    &quot;Databases&quot;: {  &quot;Type&quot;: &quot;string[]&quot;, &quot;DefaultValue&quot;: [ &#39;core&#39;, &#39;master&#39;, &#39;web&#39; ] }
+}
+</code></pre>
+<p>The 'MasterSQLUser' parameter will obtain it's value from the 'DefaultValue' of the 'SQLUser' parameter, but it can still be overridden from the command line.</p>
+<p>A parameter cannot have a <code>DefaultValue</code> and a <code>Reference</code>.</p>
+<p>An error will be thrown if the referenced parameter does not exist or creates a circular reference.</p>
+<p>For example, the following parameter declarations are not permitted:</p>
+<pre><code>{
+    &quot;Source&quot;: { &quot;Type&quot;: &quot;string&quot; },
+    &quot;SQLUser: {  &quot;Type&quot;: &quot;string&quot;, &quot;Reference&quot;: &quot;MissingParameter&quot; }
+}
+
+{
+    &quot;Source&quot;: { &quot;Type&quot;: &quot;string&quot; },
+    &quot;SQLUser: {  &quot;Type&quot;: &quot;string&quot;, &quot;Reference&quot;: &quot;SQLUser&quot; }
+}
+
+{
+    &quot;SQLUser: {  &quot;Type&quot;: &quot;string&quot;, &quot;Reference&quot;: &quot;CoreSQLUser&quot; },
+    &quot;CoreSQLUser: {  &quot;Type&quot;: &quot;string&quot;, &quot;Reference&quot;: &quot;MasterSQLUser&quot; },
+    &quot;MasterSQLUser: {  &quot;Type&quot;: &quot;string&quot;, &quot;Reference&quot;: &quot;WebSQLUser&quot; },
+    &quot;WebSQLUser: {  &quot;Type&quot;: &quot;string&quot;, &quot;Reference&quot;: &quot;SQLUser&quot; }
+}</code></pre>
+<h2 id="variables">Variables</h2>
+<p>Each entry in the 'Variables' section is a Key/Value pair that allows common<br />
+configuration elements that can be calculated or constructed and then used<br />
+within the configuration file.</p>
+<pre><code>{
+    &quot;DeploymentDirectory&quot;: &quot;[concat(environment(&#39;systemdrive&#39;), &#39;\inetpub\wwwroot&#39;)]&quot;
+}</code></pre>
+<p>Variables can use the 'Config Function' syntax in order to retrieve information<br />
+or manipulate the value that the variable will contain.</p>
+<p>Variables are lazy loaded. This means they will be evaluated the first time they are<br />
+used (by another variable or task). The value will then persist for any other requests.</p>
+<h2 id="config-functions">Config Functions</h2>
+<p>Config Functions are a way of calculating values for Variables or Task<br />
+parameters. They can make use of Parameters and Variables declared within a<br />
+config file or other available information, e.g. Environment Variables.</p>
+<p>A Config Function is declared within square brackets and consists of a function<br />
+name and parenthesis:</p>
+<pre><code>{
+    &quot;SomeVariable&quot;: &quot;[function()]&quot;
+}</code></pre>
+<p>Config Functions can accept parameters (separated by commas):</p>
+<pre><code>{
+    &quot;SomeVariable&quot;: &quot;[function(1,2,3)]&quot;
+}</code></pre>
+<p>Config Function parameters can be integers, string literals or other functions:</p>
+<pre><code>{
+    &quot;SomeVariable&quot;: &quot;[function(1)]&quot;
+    &quot;SomeOtherVariable&quot;: &quot;[function(&quot;1&quot;)]&quot;
+    &quot;AnotherVariable&quot;: &quot;[function(otherFunction())]&quot;
+}</code></pre>
+<p>The value for a Config Function is determined when the Config File is processed<br />
+at the beginning of an installation.</p>
+<p>To discover the Config Functions available, you can run:</p>
+<pre><code>PS C:\&gt;Get-Command -Name Invoke-*ConfigFunction</code></pre>
+<h2 id="tasks">Tasks</h2>
+<p>Each entry in the task section is an object defining a task to be executed.<br />
+The task must be in the format</p>
+<pre><code>{
+    &quot;TaskName&quot; : {
+        &quot;Type&quot; : &quot;TaskType&quot;,
+        &quot;Params&quot; : {
+            &quot;ParamName&quot; : &quot;value&quot;
+        }
+    }
+}</code></pre>
+<ul>
+<li>'TaskName' identifies the task in the configuration</li>
+<li>'Type' is the type of task to execute.</li>
+<li>'Params' defines a collection of parameters to pass to the task</li>
+</ul>
+<p>For example, this configuration defines a use of the 'EnsurePath' task</p>
+<pre><code>{
+    &quot;CheckPaths&quot; : {
+        &quot;Type&quot; : &quot;EnsurePath&quot;,
+        &quot;Params&quot; : {
+            &quot;Clean&quot; : &quot;c:\deploy&quot;,
+            &quot;Exists&quot; : &quot;c:\deploy\here&quot;
+        }
+    }
+}</code></pre>
+<p>Tasks also support multiple parameter sets. By passing an array of parameters<br />
+instead of an object. For example, we can copy multiple file paths using the<br />
+below configuration:</p>
+<pre><code>&quot;CopyFiles&quot; : {
+    &quot;Type&quot;: &quot;Copy&quot;,
+    &quot;Params&quot;: [
+        { &quot;Source&quot;: &quot;c:\files&quot;, &quot;Destination&quot;: &quot;c:\newfiles&quot; },
+        { &quot;Source&quot;: &quot;c:\files2&quot;, &quot;Destination&quot;: &quot;c:\newfiles2&quot; },
+        { &quot;Source&quot;: &quot;c:\files3&quot;, &quot;Destination&quot;: &quot;c:\newfiles3&quot; }
+    ]
+}</code></pre>
+<blockquote>
+<p>NOTE: The task type is defined by its function name.<br />
+You must be call the task <code>Invoke-&lt;type&gt;Task</code> where <code>&lt;type&gt;</code> is the value used<br />
+in the configuration.</p>
+</blockquote>
+<p>To discover the tasks available, you can run:</p>
+<pre><code>PS C:\&gt;Get-Command -Name Invoke-*Task</code></pre>
+<h2 id="modules">Modules</h2>
+<p>Modules is a list of PowerShell modules to load into the environment before<br />
+executing any tasks. You can use this to load modules that tasks depend on, or<br />
+to load additional modules themselves.</p>
+<pre><code>{
+    &quot;Modules&quot; : [
+        &quot;WebAdministration&quot;,
+        &quot;c:\path\to\custom\module.psm1&quot;
+    ]
+}</code></pre>
+<h1 id="see-also">SEE ALSO</h1>
+<ul>
+<li>about_SitecoreInstallFramework_Extending</li>
+<li>about_SitecoreInstallFramework_Configurations</li>
+</ul>
+</body>
+</html>

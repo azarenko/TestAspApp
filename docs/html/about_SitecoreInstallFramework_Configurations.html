@@ -1,0 +1,224 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+  <meta http-equiv="Content-Style-Type" content="text/css" />
+  <meta name="generator" content="pandoc" />
+  <title></title>
+  <style type="text/css">code{white-space: pre;}</style>
+</head>
+<body>
+<h1 id="sitecoreinstallframework_configurations">SitecoreInstallFramework_Configurations</h1>
+<h2 id="about_sitecoreinstallframework_configurations">about_SitecoreInstallFramework_Configurations</h2>
+<h1 id="short-description">SHORT DESCRIPTION</h1>
+<p>Full configuration examples for the Sitecore Install Framework.</p>
+<h1 id="long-description">LONG DESCRIPTION</h1>
+<p>This topic outlines examples of configurations that can be created using the<br />
+Sitecore Install Framework.</p>
+<p>See <code>about_SitecoreInstallFramework</code> for general information on the framework<br />
+and <code>about_SitecoreInstallFramework_Extending</code> for information on creating your<br />
+own tasks and config functions to use in a configuration.</p>
+<h1 id="examples">EXAMPLES</h1>
+<h2 id="single-task">Single Task</h2>
+<pre><code>{
+    &quot;Tasks&quot;: {
+        &quot;CopyFiles&quot;: {
+            &quot;Type&quot;: &quot;Copy&quot;,
+            &quot;Params&quot;: {
+                &quot;Source&quot;: &quot;c:\myfiles&quot;,
+                &quot;Destination&quot;: &quot;c:\destination
+            }
+        }
+    }
+}</code></pre>
+<p>This example will copy files from <code>c:\myfiles</code> to <code>c:\destination</code></p>
+<h2 id="skipping-a-task">Skipping a Task</h2>
+<pre><code>{
+    &quot;Tasks&quot;: {
+        &quot;CopyFiles&quot;: {
+            &quot;Type&quot;: &quot;Copy&quot;,
+            &quot;Params&quot;: {
+                &quot;Source&quot;: &quot;c:\myfiles&quot;,
+                &quot;Destination&quot;: &quot;c:\destination
+            },
+            &quot;Skip&quot;: &quot;true&quot;
+        }
+    }
+}</code></pre>
+<p>This example will skip the &quot;CopyFiles&quot; task.</p>
+<h2 id="default-parameters">Default Parameters</h2>
+<pre><code>{
+    &quot;Parameters&quot;: {
+        &quot;Source&quot;: { &quot;Type&quot;: &quot;string&quot;, &quot;DefaultValue&quot;: &quot;c:\myfiles&quot; }
+    },
+    &quot;Tasks&quot;: {
+        &quot;CopyFiles&quot;: {
+            &quot;Type&quot;: &quot;Copy&quot;,
+            &quot;Params&quot;: {
+                &quot;Source&quot;: &quot;[parameter(&#39;Source&#39;)]&quot;,
+                &quot;Destination&quot;: &quot;c:\destination
+            }
+        }
+    }
+}</code></pre>
+<p>This example will copy files from <code>c:\myfiles</code> to <code>c:\destination</code> by default.<br />
+If the <code>Source</code> parameter is passed, a different set of files will be copied.</p>
+<p>For example, if the above was saved as <code>configuration.json</code>, running<br />
+<code>Install-SitecoreConfiguration -Path .\configuration.json -Source c:\otherfiles</code> would<br />
+copy files from <code>c:\otherfiles</code> to the destination.</p>
+<h2 id="mandatory-parameters">Mandatory Parameters</h2>
+<pre><code>{
+    &quot;Parameters&quot;: {
+        &quot;Source&quot;: { &quot;Type&quot;: &quot;string&quot;, &quot;Description&quot; : &quot;Path to the source files&quot; }
+    },
+    &quot;Tasks&quot;: {
+        &quot;CopyFiles&quot;: {
+            &quot;Type&quot;: &quot;Copy&quot;,
+            &quot;Params&quot;: {
+                &quot;Source&quot;: &quot;[parameter(&#39;Source&#39;)]&quot;,
+                &quot;Destination&quot;: &quot;c:\destination
+            }
+        }
+    }
+}</code></pre>
+<p>In this example the <code>Source</code> parameter is now mandatory. Running <code>Install-SitecoreConfiguration</code><br />
+using this configuration will request the value if the user does not provide it.<br />
+The description can be shown at the command line to help the user understand what<br />
+the parameter requires.</p>
+<h2 id="reference-parameters">Reference Parameters</h2>
+<pre><code>{
+    &quot;Parameters&quot;: {
+        &quot;Source&quot;: { &quot;Type&quot;: &quot;string&quot;, &quot;DefaultValue&quot;: &quot;c:\myfiles&quot; },
+        &quot;Reference&quot;: { &quot;Type&quot;: &quot;string&quot;, &quot;Reference&quot;: &quot;Source&quot; }
+    },
+    &quot;Tasks&quot;: {
+        &quot;CopyFiles&quot;: {
+            &quot;Type&quot;: &quot;Copy&quot;,
+            &quot;Params&quot;: {
+                &quot;Source&quot;: &quot;[parameter(&#39;Reference&#39;)]&quot;,
+                &quot;Destination&quot;: &quot;c:\destination
+            }
+        }
+    }
+}</code></pre>
+<p>This example will copy files from <code>c:\myfiles</code> to <code>c:\destination</code> by default.<br />
+If the <code>Source</code> parameter is passed, a different set of files will be copied.</p>
+<p>For example, if the above was saved as <code>configuration.json</code>, running<br />
+<code>Install-SitecoreConfiguration -Path .\configuration.json -Source c:\otherfiles</code> would<br />
+copy files from <code>c:\otherfiles</code> to the destination.</p>
+<h2 id="variables">Variables</h2>
+<pre><code>{
+    &quot;Parameters&quot;: {
+        &quot;Source&quot;: { &quot;Type&quot;: &quot;string&quot;, &quot;Description&quot; : &quot;Path to the source files&quot; }
+    },
+    &quot;Variables&quot;: {
+        &quot;Destination&quot;: &quot;[concat(environment(&#39;SystemDrive&#39;), &#39;\\destination&#39;)]&quot;
+    },
+    &quot;Tasks&quot;: {
+        &quot;CopyFiles&quot;: {
+            &quot;Type&quot;: &quot;Copy&quot;,
+            &quot;Params&quot;: {
+                &quot;Source&quot;: &quot;[parameter(&#39;Source&#39;)]&quot;,
+                &quot;Destination&quot;: &quot;[variable(&#39;Destination&#39;)]&quot;
+            }
+        }
+    }
+}</code></pre>
+<p>In this example, a variable is used to calculate the destination path. Variables<br />
+can use other config functions (e.g. Parameter, Environment, Concat) and also<br />
+use variables that have already been declared.</p>
+<h2 id="multiple-tasks">Multiple Tasks</h2>
+<pre><code>{
+    &quot;Parameters&quot;: {
+        &quot;Source&quot;: { &quot;Type&quot;: &quot;string&quot;, &quot;Description&quot; : &quot;Path to the source files&quot; }
+    },
+    &quot;Variables&quot;: {
+        &quot;Destination&quot;: &quot;[concat(environment(&#39;SystemDrive&#39;), &#39;\\destination&#39;)]&quot;
+    },
+    &quot;Tasks&quot;: {
+        &quot;PreparePath&quot;: {
+            &quot;Type&quot;: &quot;EnsurePath&quot;,
+            &quot;Params&quot;: {
+                &quot;Clean&quot;: [ &quot;[variable(&#39;Destination&#39;)]&quot; ]
+            }
+        },
+        &quot;CopyFiles&quot;: {
+            &quot;Type&quot;: &quot;Copy&quot;,
+            &quot;Params&quot;: {
+                &quot;Source&quot;: &quot;[parameter(&#39;Source&#39;)]&quot;,
+                &quot;Destination&quot;: &quot;[variable(&#39;Destination&#39;)]&quot;
+            }
+        }
+    }
+}</code></pre>
+<p>In this example the task called <code>PreparePath</code> will run first. Using the <code>EnsurePath</code><br />
+task will ensure the destination path exists and does not contain any files.<br />
+The <code>CopyFiles</code> task copies files to the empty directory.</p>
+<p>By default, tasks are ran in the order they are declared in the configuration.<br />
+The order of the tasks can be modified using the <code>From</code>, <code>To</code>, and <code>Tasks</code><br />
+parameters when calling <code>Install-SitecoreConfiguration</code>.</p>
+<h2 id="extending-with-modules">Extending with modules</h2>
+<p>You can extend configurations with custom task and config functions. You can use<br />
+the <code>Register-SitecoreInstallExtension</code> command to register functions for use in<br />
+configurations :</p>
+<pre><code>Register-SitecoreInstallExtension -Command Write-Output -As WriteOutput -Type Task
+Register-SitecoreInstallExtension -Command Get-Random -As Random -Type ConfigFunction</code></pre>
+<p>If the customizations were saved to <code>c:\scripts\extensions.psm1</code>, they can be<br />
+included in a configuration by setting the <code>Modules</code> property:</p>
+<pre><code>{
+    &quot;Parameters&quot;: {
+        &quot;Source&quot;: { &quot;Type&quot;: &quot;string&quot;, &quot;Description&quot; : &quot;Path to the source files&quot; }
+    },
+    &quot;Variables&quot;: {
+        &quot;RandomFolder&quot;: &quot;[random(5000)]&quot;,
+        &quot;Destination&quot;: &quot;[concat(environment(&#39;SystemDrive&#39;), &#39;\\&#39;, variable(&#39;RandomFolder&#39;))]&quot;
+    },
+    &quot;Tasks&quot;: {
+        &quot;CustomWrite&quot;: {
+            &quot;Type&quot;: &quot;WriteOutput&quot;,
+            &quot;Params&quot;: {
+                &quot;Message&quot;: &quot;Custom task is running&quot;
+            }
+        },
+        &quot;PreparePath&quot;: {
+            &quot;Type&quot;: &quot;EnsurePath&quot;,
+            &quot;Params&quot;: {
+                &quot;Clean&quot;: [ &quot;[variable(&#39;Destination&#39;)]&quot; ]
+            }
+        },
+        &quot;CopyFiles&quot;: {
+            &quot;Type&quot;: &quot;Copy&quot;,
+            &quot;Params&quot;: {
+                &quot;Source&quot;: &quot;[parameter(&#39;Source&#39;)]&quot;,
+                &quot;Destination&quot;: &quot;[variable(&#39;Destination&#39;)]&quot;
+            }
+        }
+    },
+    &quot;Modules&quot;: [
+        &quot;c:\\scripts\\extensions.psm1&quot;
+    ]
+}</code></pre>
+<p>Now when the configuration is ran the variable <code>RandomFolder</code> is set using the<br />
+custom config function. The <code>CustomWrite</code> task is also ran using the custom<br />
+PowerShell function.</p>
+<p>Multiple modules can be added to a configuration.</p>
+<h2 id="settings">Settings</h2>
+<p>You can control features of the installation process by adding settings to a<br />
+configuration.</p>
+<pre><code>{
+    &quot;Settings&quot;: {
+        &quot;RequireAdmin&quot; : false,
+        &quot;ErrorAction&quot; : &quot;Stop&quot;,
+        &quot;WarningAction&quot;: &quot;Continue&quot;
+        &quot;InformationAction&quot;: &quot;Continue&quot;
+    }
+}</code></pre>
+<p>For more information on settings see <code>about_SitecoreInstallFramework_Settings</code></p>
+<h1 id="see-also">SEE ALSO</h1>
+<ul>
+<li>about_SitecoreInstallFramework</li>
+<li>about_SitecoreInstallFramework_Extending</li>
+<li>about_SitecoreInstallFramework_Settings</li>
+</ul>
+</body>
+</html>

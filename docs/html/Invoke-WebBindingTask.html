@@ -1,0 +1,210 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+  <meta http-equiv="Content-Style-Type" content="text/css" />
+  <meta name="generator" content="pandoc" />
+  <title></title>
+  <style type="text/css">code{white-space: pre;}</style>
+  <style type="text/css">
+div.sourceCode { overflow-x: auto; }
+table.sourceCode, tr.sourceCode, td.lineNumbers, td.sourceCode {
+  margin: 0; padding: 0; vertical-align: baseline; border: none; }
+table.sourceCode { width: 100%; line-height: 100%; }
+td.lineNumbers { text-align: right; padding-right: 4px; padding-left: 4px; color: #aaaaaa; border-right: 1px solid #aaaaaa; }
+td.sourceCode { padding-left: 5px; }
+code > span.kw { color: #007020; font-weight: bold; } /* Keyword */
+code > span.dt { color: #902000; } /* DataType */
+code > span.dv { color: #40a070; } /* DecVal */
+code > span.bn { color: #40a070; } /* BaseN */
+code > span.fl { color: #40a070; } /* Float */
+code > span.ch { color: #4070a0; } /* Char */
+code > span.st { color: #4070a0; } /* String */
+code > span.co { color: #60a0b0; font-style: italic; } /* Comment */
+code > span.ot { color: #007020; } /* Other */
+code > span.al { color: #ff0000; font-weight: bold; } /* Alert */
+code > span.fu { color: #06287e; } /* Function */
+code > span.er { color: #ff0000; font-weight: bold; } /* Error */
+code > span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
+code > span.cn { color: #880000; } /* Constant */
+code > span.sc { color: #4070a0; } /* SpecialChar */
+code > span.vs { color: #4070a0; } /* VerbatimString */
+code > span.ss { color: #bb6688; } /* SpecialString */
+code > span.im { } /* Import */
+code > span.va { color: #19177c; } /* Variable */
+code > span.cf { color: #007020; font-weight: bold; } /* ControlFlow */
+code > span.op { color: #666666; } /* Operator */
+code > span.bu { } /* BuiltIn */
+code > span.ex { } /* Extension */
+code > span.pp { color: #bc7a00; } /* Preprocessor */
+code > span.at { color: #7d9029; } /* Attribute */
+code > span.do { color: #ba2121; font-style: italic; } /* Documentation */
+code > span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
+code > span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } /* CommentVar */
+code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Information */
+  </style>
+</head>
+<body>
+<hr />
+<p>external help file: SitecoreInstallFramework-help.xml<br />
+online version:<br />
+schema: 2.0.0<br />
+---</p>
+<h1 id="invoke-webbindingtask">Invoke-WebBindingTask</h1>
+<h2 id="synopsis">SYNOPSIS</h2>
+<p>Creates, updates, and removes web bindings.</p>
+<h2 id="syntax">SYNTAX</h2>
+<pre><code>Invoke-WebBindingTask [-SiteName] &lt;String&gt; [[-Add] &lt;PSObject[]&gt;] [[-Remove] &lt;PSObject[]&gt;]
+ [[-Update] &lt;PSObject[]&gt;] [-WhatIf] [-Confirm] [&lt;CommonParameters&gt;]</code></pre>
+<h2 id="description">DESCRIPTION</h2>
+<p>Supports adding, removing, and updating web bindings for a site.</p>
+<p>You can add, remove, and update bindings at the same time. Changes are applied in the following order:</p>
+<ul>
+<li>Removed</li>
+<li>Added</li>
+<li>Updated</li>
+</ul>
+<p>ADDING<br />
+When adding bindings, each binding entry must be supplied as an object in the following format:<br />
+@{<br />
+HostHeader = <string><br />
+IPAddress = <string><br />
+Port = <int><br />
+Protocol = <string><br />
+SSlFlags = <int><br />
+Thumbprint = <string><br />
+}</p>
+<p>REMOVING<br />
+When removing bindings, each entry must be in the following format:<br />
+@{<br />
+HostHeader = <string><br />
+IPAddress = <string><br />
+Port = <int><br />
+Protocol = <string><br />
+}</p>
+<p>Alternatively, you can provide information as:<br />
+@{<br />
+BindingInformation = '<ipaddress>:<port>:<hostheader>'<br />
+Protocol = <string><br />
+}</p>
+<p>Optionally, all bindings can be removed by passing '*' instead of binding information.</p>
+<p>UPDATING<br />
+When updating bindings, each entry must be in the following format:<br />
+@{<br />
+HostHeader = <string><br />
+IPAddress = <string><br />
+Port = <int><br />
+PropertyName = <string><br />
+Value = <string><br />
+Thumbprint = <string><br />
+}</p>
+<p>Alternatively, you can provide information as :<br />
+@{<br />
+BindingInformation = '<ipaddress>:<port>:<hostheader>'<br />
+PropertyName = <string><br />
+Value = <string><br />
+}</p>
+<p>NOTE: The 'propertyname' must be the name of the property to update, for example, HostHeader,IPAddress or Port</p>
+<h2 id="examples">EXAMPLES</h2>
+<h3 id="example-1">Example 1</h3>
+<pre><code>PS C:\&gt; Invoke-WebBindingTask -SiteName ExampleSite -Add @{ Port = 80 }</code></pre>
+<p>Adds a new web binding to a site. In this example, the binding matches the default '*:80:' binding.</p>
+<h3 id="example-2">Example 2</h3>
+<pre><code>PS C:\&gt; Invoke-WebBindingTask -SiteName ExampleSite -Add @{ Port = 443; Protocol = &#39;https&#39;; Thumbprint = &#39;97A875E0F559AB380C1FDBEF3CB391E5C7ED87BA&#39; }</code></pre>
+<p>Adds a new https binding to a site. In this example, the binding matches the default '*:443:' binding with a certificate.</p>
+<h3 id="example-3">Example 3</h3>
+<pre><code>PS C:\&gt; Invoke-WebBindingTask -SiteName ExampleSite -Add @{ HostHeader = &#39;Example&#39;; IPAddress = &#39;127.0.0.1&#39; }</code></pre>
+<p>Adds a binding for the localhost address restricted to the hostheader 'Example'.</p>
+<h3 id="example-4">Example 4</h3>
+<pre><code>PS C:\&gt; Invoke-WebBindingTask -SiteName ExampleSite -Remove * -Add @{ Protocol = &#39;https&#39; }</code></pre>
+<p>Removes all existing bindings before adding a default https binding. The binding is set to '*:443:'.</p>
+<h3 id="example-5">Example 5</h3>
+<pre><code>PS C:\&gt; Invoke-WebBindingTask -SiteName ExampleSite -Remove @{ Protocol = &#39;http&#39; }</code></pre>
+<p>Removes all existing bindings that use the 'http' protocol.</p>
+<h3 id="example-6">Example 6</h3>
+<pre><code>PS C:\&gt; Invoke-WebBindingTask -SiteName ExampleSite -Update @{ Port = 80; PropertyName = &#39;Port&#39;; Value = 81 }</code></pre>
+<p>Updates existing bindings using port 80 with an empty hostheader and no assigned IP to use port 81.</p>
+<h3 id="example-7">Example 7</h3>
+<pre><code>PS C:\&gt; Invoke-WebBindingTask -SiteName ExampleSite -Update @{ Port = 443; Thumbprint = &#39;97A875E0F559AB380C1FDBEF3CB391E5C7ED87BA&#39; }</code></pre>
+<p>Updates existing binding on port 443 to use the certificate with thumbprint '97A875E0F559AB380C1FDBEF3CB391E5C7ED87BA'.</p>
+<h2 id="parameters">PARAMETERS</h2>
+<h3 id="add">-Add</h3>
+<p>A collection of bindings to add.<br />
+See function description for the format.</p>
+<div class="sourceCode"><pre class="sourceCode yaml"><code class="sourceCode yaml"><span class="fu">Type:</span><span class="at"> PSObject[]</span>
+<span class="fu">Parameter Sets:</span><span class="at"> (All)</span>
+<span class="fu">Aliases:</span><span class="at"> </span>
+
+<span class="fu">Required:</span><span class="at"> False</span>
+<span class="fu">Position:</span><span class="at"> 1</span>
+<span class="fu">Default value:</span><span class="at"> None</span>
+<span class="fu">Accept pipeline input:</span><span class="at"> False</span>
+<span class="fu">Accept wildcard characters:</span><span class="at"> False</span></code></pre></div>
+<h3 id="remove">-Remove</h3>
+<p>A collection of bindings to remove.<br />
+See function description for the format.</p>
+<div class="sourceCode"><pre class="sourceCode yaml"><code class="sourceCode yaml"><span class="fu">Type:</span><span class="at"> PSObject[]</span>
+<span class="fu">Parameter Sets:</span><span class="at"> (All)</span>
+<span class="fu">Aliases:</span><span class="at"> </span>
+
+<span class="fu">Required:</span><span class="at"> False</span>
+<span class="fu">Position:</span><span class="at"> 2</span>
+<span class="fu">Default value:</span><span class="at"> None</span>
+<span class="fu">Accept pipeline input:</span><span class="at"> False</span>
+<span class="fu">Accept wildcard characters:</span><span class="at"> False</span></code></pre></div>
+<h3 id="sitename">-SiteName</h3>
+<p>The name of the site where bindings are modified.</p>
+<div class="sourceCode"><pre class="sourceCode yaml"><code class="sourceCode yaml"><span class="fu">Type:</span><span class="at"> String</span>
+<span class="fu">Parameter Sets:</span><span class="at"> (All)</span>
+<span class="fu">Aliases:</span><span class="at"> </span>
+
+<span class="fu">Required:</span><span class="at"> True</span>
+<span class="fu">Position:</span><span class="at"> 0</span>
+<span class="fu">Default value:</span><span class="at"> None</span>
+<span class="fu">Accept pipeline input:</span><span class="at"> False</span>
+<span class="fu">Accept wildcard characters:</span><span class="at"> False</span></code></pre></div>
+<h3 id="update">-Update</h3>
+<p>Bindings that will be updated.<br />
+See function description for the format.</p>
+<div class="sourceCode"><pre class="sourceCode yaml"><code class="sourceCode yaml"><span class="fu">Type:</span><span class="at"> PSObject[]</span>
+<span class="fu">Parameter Sets:</span><span class="at"> (All)</span>
+<span class="fu">Aliases:</span><span class="at"> </span>
+
+<span class="fu">Required:</span><span class="at"> False</span>
+<span class="fu">Position:</span><span class="at"> 3</span>
+<span class="fu">Default value:</span><span class="at"> None</span>
+<span class="fu">Accept pipeline input:</span><span class="at"> False</span>
+<span class="fu">Accept wildcard characters:</span><span class="at"> False</span></code></pre></div>
+<h3 id="confirm">-Confirm</h3>
+<p>Prompts you for confirmation before running the cmdlet.</p>
+<div class="sourceCode"><pre class="sourceCode yaml"><code class="sourceCode yaml"><span class="fu">Type:</span><span class="at"> SwitchParameter</span>
+<span class="fu">Parameter Sets:</span><span class="at"> (All)</span>
+<span class="fu">Aliases:</span><span class="at"> cf</span>
+
+<span class="fu">Required:</span><span class="at"> False</span>
+<span class="fu">Position:</span><span class="at"> Named</span>
+<span class="fu">Default value:</span><span class="at"> None</span>
+<span class="fu">Accept pipeline input:</span><span class="at"> False</span>
+<span class="fu">Accept wildcard characters:</span><span class="at"> False</span></code></pre></div>
+<h3 id="whatif">-WhatIf</h3>
+<p>Shows what would happen if the cmdlet runs.<br />
+The cmdlet is not run.</p>
+<div class="sourceCode"><pre class="sourceCode yaml"><code class="sourceCode yaml"><span class="fu">Type:</span><span class="at"> SwitchParameter</span>
+<span class="fu">Parameter Sets:</span><span class="at"> (All)</span>
+<span class="fu">Aliases:</span><span class="at"> wi</span>
+
+<span class="fu">Required:</span><span class="at"> False</span>
+<span class="fu">Position:</span><span class="at"> Named</span>
+<span class="fu">Default value:</span><span class="at"> None</span>
+<span class="fu">Accept pipeline input:</span><span class="at"> False</span>
+<span class="fu">Accept wildcard characters:</span><span class="at"> False</span></code></pre></div>
+<h3 id="commonparameters">CommonParameters</h3>
+<p>This cmdlet supports the common parameters: -Debug, -ErrorAction, -ErrorVariable, -InformationAction, -InformationVariable, -OutVariable, -OutBuffer, -PipelineVariable, -Verbose, -WarningAction, and -WarningVariable. For more information, see about_CommonParameters (<a href="http://go.microsoft.com/fwlink/?LinkID=113216" class="uri">http://go.microsoft.com/fwlink/?LinkID=113216</a>).</p>
+<h2 id="inputs">INPUTS</h2>
+<h3 id="none">None</h3>
+<h2 id="outputs">OUTPUTS</h2>
+<h3 id="system.object">System.Object</h3>
+<h2 id="notes">NOTES</h2>
+<h2 id="related-links">RELATED LINKS</h2>
+</body>
+</html>

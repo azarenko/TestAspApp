@@ -1,0 +1,2 @@
+Do not update select2.js component since it contains manual changes in it for fixing the folloiwng bug:
+http://tfs4dk1.dk.sitecore.net/tfs/PD-Products-01/Products/Foundation.Content.Core/_workitems?id=166595&_a=edit

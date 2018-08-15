@@ -1,0 +1,106 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+  <meta http-equiv="Content-Style-Type" content="text/css" />
+  <meta name="generator" content="pandoc" />
+  <title></title>
+  <style type="text/css">code{white-space: pre;}</style>
+</head>
+<body>
+<h1 id="extending-the-sitecoreinstallframework">Extending the SitecoreInstallFramework</h1>
+<h2 id="about_sitecoreinstallframework_extending">about_SitecoreInstallFramework_Extending</h2>
+<h1 id="short-description">SHORT DESCRIPTION</h1>
+<p>How to extend the Sitecore Installation Framework.</p>
+<h1 id="long-description">LONG DESCRIPTION</h1>
+<p>The SitecoreInstallFramework provides a number of extension points that allow<br />
+you to customize it to suit specific requirements for a Sitecore installation.</p>
+<p>The extension points are:</p>
+<ul>
+<li>Custom Tasks</li>
+<li>Custom Config Functions</li>
+</ul>
+<h2 id="custom-tasks">Custom Tasks</h2>
+<p>A task is a PowerShell function that has been registered with the installation:</p>
+<pre><code>Register-SitecoreInstallExtension -Command &lt;command&gt; -As &lt;name&gt; -Type Task</code></pre>
+<p>Any parameters that the task declares can be passed directly from a<br />
+configuration.</p>
+<h3 id="custom-task-example">Custom Task Example</h3>
+<p>For example, a custom task that displays a colored message could be created and<br />
+saved in a script 'c:\customscript.psm1':</p>
+<pre><code>function Invoke-ColorMessageTask {
+    [CmdletBinding()]
+    param(
+        [Parameter(Mandatory=$true)]
+        [string]$Message,
+        [string]$Color = &#39;Green&#39;
+    )
+
+    Write-Host -Object $Message -ForegroundColor $Color
+}
+Register-SitecoreInstallExtension -Command Invoke-ColorMessageTask -As ColorMessage -Type Task</code></pre>
+<blockquote>
+<p>NOTE: By using parameter validation the execution will fail if '$Message' is not provided.<br />
+The default color 'Green' is used if it is not declared in the configuration.</p>
+</blockquote>
+<p>To use this in a configuration:</p>
+<pre><code>{
+    &quot;Tasks&quot; : {
+        &quot;ShowMessage&quot; : {
+            &quot;Type&quot; : &quot;ColorMessage&quot;,
+            &quot;Params&quot; : {
+                &quot;Message&quot; : &quot;This is my message&quot;
+            }
+        }
+    },
+    &quot;Modules&quot; : [
+        &quot;c:\customscript.psm1&quot;
+    ]
+}</code></pre>
+<p>By adding the script, the task will can be discovered when the configuration is<br />
+loaded.</p>
+<h2 id="custom-config-functions">Custom Config Functions</h2>
+<p>A config function is a PowerShell function that has been registered with the<br />
+installation:</p>
+<pre><code>Register-SitecoreInstallExtension -Command &lt;command&gt; -As &lt;name&gt; -Type ConfigFunction</code></pre>
+<p>Any parameters that the task declares can be passed directly from a<br />
+configuration. Parameters are passed by order, not be name.</p>
+<p>A config function should return a value.</p>
+<h3 id="custom-config-function-example">Custom Config Function Example</h3>
+<p>For example, a custom task that adds two integers could be created and saved in<br />
+a script 'c:\customconfigfunction.psm1':</p>
+<pre><code>function Invoke-AddConfigFunction {
+    param(
+        [Parameter(Mandatory=$true)]
+        [int]$FirstNumber,
+        [Parameter(Mandatory=$true)]
+        [int]$SecondNumber
+    )
+
+    return $FirstNumber + $SecondNumber
+}
+Register-SitecoreInstallExtension -Command Invoke-AddConfigFunction -As Add -Type ConfigFunction</code></pre>
+<blockquote>
+<p>NOTE: By using parameter validation the execution fails if '$FirstNumber' and 'SecondNumber' are not provided.</p>
+</blockquote>
+<p>To use this in a configuration:</p>
+<pre><code>{
+    &quot;Variables&quot; : {
+        &quot;Sum&quot; : &quot;[add(1,2)]&quot;
+    },
+    &quot;Modules&quot; : [
+        &quot;c:\customconfigfunction.psm1&quot;
+    ]
+}</code></pre>
+<p>By adding the script, the task can be discovered when the configuration is<br />
+loaded.</p>
+<blockquote>
+<p>NOTE: We recommend that custom config functions are kept simple and small because any complex scripts will impact the performance of the processing of a configuration file.</p>
+</blockquote>
+<h1 id="see-also">SEE ALSO</h1>
+<ul>
+<li>about_SitecoreInstallFramework</li>
+<li>about_SitecoreInstallFramework_Configurations</li>
+</ul>
+</body>
+</html>

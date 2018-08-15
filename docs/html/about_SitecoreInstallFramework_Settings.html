@@ -1,0 +1,62 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+  <meta http-equiv="Content-Style-Type" content="text/css" />
+  <meta name="generator" content="pandoc" />
+  <title></title>
+  <style type="text/css">code{white-space: pre;}</style>
+</head>
+<body>
+<h1 id="sitecoreinstallframework_settings">SitecoreInstallFramework_Settings</h1>
+<h2 id="about_sitecoreinstallframework_settings">about_SitecoreInstallFramework_Settings</h2>
+<h1 id="short-description">SHORT DESCRIPTION</h1>
+<p>Control settings that can be configured for the Sitecore Install framework.</p>
+<h1 id="long-description">LONG DESCRIPTION</h1>
+<p>This topic covers the optional settings that may be applied when running the<br />
+Sitecore Install framework.</p>
+<h1 id="examples">EXAMPLES</h1>
+<h2 id="informationaction">InformationAction</h2>
+<pre><code>{
+    &quot;Settings&quot; : {
+        &quot;InformationAction&quot; : &quot;SilentlyContinue&quot;
+    }
+}</code></pre>
+<p>The <code>InformationAction</code> may be set in a configuration file to control the action<br />
+that will be taken when content is logged to the information stream.</p>
+<p>The setting accepts any <code>[System.Management.Automation.ActionPreference]</code>. The<br />
+default value is <code>Continue</code>.</p>
+<p>The <code>InformationAction</code> setting may be overridden when calling<br />
+<code>Install-SitecoreConfiguration</code>.</p>
+<h2 id="warningaction">WarningAction</h2>
+<pre><code>{
+    &quot;Settings&quot; : {
+        &quot;WarningAction&quot; : &quot;SilentlyContinue&quot;
+    }
+}</code></pre>
+<p>The <code>WarningAction</code> may be set in a configuration file to control the action<br />
+that will be taken when content is logged to the warning stream.</p>
+<p>The setting accepts any <code>[System.Management.Automation.ActionPreference]</code>. The<br />
+default value is <code>Continue</code>.</p>
+<p>The <code>WarningAction</code> setting may be overridden when calling<br />
+<code>Install-SitecoreConfiguration</code>.</p>
+<h2 id="erroraction">ErrorAction</h2>
+<pre><code>{
+    &quot;Settings&quot; : {
+        &quot;ErrorAction&quot; : &quot;Continue&quot;
+    }
+}</code></pre>
+<p>The <code>ErrorAction</code> may be set in a configuration file to control the action<br />
+that will be taken when content is logged to the error stream.</p>
+<p>The setting accepts any <code>[System.Management.Automation.ActionPreference]</code>. The<br />
+default value is <code>Stop</code>.</p>
+<p>The <code>ErrorAction</code> setting may be overridden when calling<br />
+<code>Install-SitecoreConfiguration</code>.</p>
+<h1 id="see-also">SEE ALSO</h1>
+<ul>
+<li><a href="https://msdn.microsoft.com/en-us/powershell/reference/5.1/microsoft.powershell.core/about/about_preference_variables" class="uri">https://msdn.microsoft.com/en-us/powershell/reference/5.1/microsoft.powershell.core/about/about_preference_variables</a></li>
+<li><a href="https://msdn.microsoft.com/en-us/library/system.management.automation.actionpreference(v=vs.85).aspx" class="uri">https://msdn.microsoft.com/en-us/library/system.management.automation.actionpreference(v=vs.85).aspx</a></li>
+<li>about_SitecoreInstallFramework</li>
+</ul>
+</body>
+</html>
