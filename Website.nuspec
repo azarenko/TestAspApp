@@ -4,10 +4,10 @@
     <id>Website</id>
     <title></title>
     <version>1.0.0</version>
-    <authors></authors>
-    <owners></owners>
-    <licenseUrl></licenseUrl>
-    <projectUrl></projectUrl>
+    <authors>Local</authors>
+    <owners>Local</owners>
+    <licenseUrl>http://testaspapp</licenseUrl>
+    <projectUrl>http://testaspapp/</projectUrl>
     <requireLicenseAcceptance>false</requireLicenseAcceptance>
     <description>A sample project</description>
     <releaseNotes>This release contains the following changes...</releaseNotes>
